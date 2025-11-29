@@ -1,0 +1,3641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruckSpot - Safe Street Food Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #10b981;
+            --primary-blue: #0ea5e9;
+            --deep-teal: #0d9488;
+            --dark-bg: #0f172a;
+            --dark-surface: #1e293b;
+            --light-surface: #f8fafc;
+            --text-dark: #0f172a;
+            --text-light: #f1f5f9;
+            --accent-yellow: #fbbf24;
+            --success-green: #22c55e;
+            --warning-orange: #f97316;
+            --gradient-primary: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            --gradient-accent: linear-gradient(135deg, var(--deep-teal), var(--primary-blue));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-surface);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: var(--gradient-primary);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        /* Weather & Location Bar */
+        .weather-location-bar {
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.95), rgba(14, 165, 233, 0.95));
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            animation: slideDown 0.6s ease-out 0.1s both;
+        }
+
+        .weather-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .location-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.25rem;
+            border-radius: 14px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .location-icon {
+            font-size: 1.3rem;
+        }
+
+        .location-select {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            outline: none;
+            padding: 0.25rem;
+            min-width: 150px;
+        }
+
+        .location-select option {
+            background: var(--dark-surface);
+            color: white;
+            padding: 0.5rem;
+        }
+
+        .weather-info {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .current-weather {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .weather-icon {
+            font-size: 2.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .temperature {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .weather-desc {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .weather-details {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .detail-icon {
+            font-size: 1.1rem;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.65rem 1rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .lang-icon {
+            font-size: 1.2rem;
+        }
+
+        .language-select {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            outline: none;
+            padding: 0.25rem;
+        }
+
+        .language-select option {
+            background: var(--dark-surface);
+            color: white;
+            padding: 0.5rem;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 0.65rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: white;
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-btn.primary {
+            background: white;
+            color: var(--primary-blue);
+            border-color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+        }
+
+        /* View Switcher */
+        .view-switcher {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            max-width: max-content;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .view-tab {
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: var(--text-dark);
+        }
+
+        .view-tab.active {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Search & Filters */
+        .search-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+        }
+
+        .search-btn {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            padding: 0.65rem 1.25rem;
+            background: var(--light-surface);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .filter-chip:hover, .filter-chip.active {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-1px);
+        }
+
+        /* Truck Grid */
+        .trucks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .truck-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .truck-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(14, 165, 233, 0.2);
+        }
+
+        .truck-image {
+            width: 100%;
+            height: 220px;
+            background: var(--gradient-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .truck-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.3));
+        }
+
+        .safety-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--success-green);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+        }
+
+        .safety-badge-green {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--success-green);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+        }
+
+        .safety-badge-yellow {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent-yellow);
+            color: var(--text-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+        }
+
+        .safety-badge-red {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ef4444;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(16, 185, 129, 0.95);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-badge.closed {
+            background: rgba(148, 163, 184, 0.95);
+        }
+
+        .truck-content {
+            padding: 1.5rem;
+        }
+
+        .truck-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+        }
+
+        .truck-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .truck-cuisine {
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .truck-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent-yellow);
+        }
+
+        .truck-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .truck-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: var(--light-surface);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--deep-teal);
+        }
+
+        .truck-footer {
+            display: flex;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--light-surface);
+        }
+
+        .truck-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .truck-btn.primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .truck-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(14, 165, 233, 0.3);
+        }
+
+        .truck-btn.secondary {
+            background: var(--light-surface);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .truck-btn.secondary:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        /* Vendor Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Events Section */
+        .events-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .event-card {
+            background: var(--light-surface);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-green);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+        }
+
+        .event-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .event-crowd {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .event-details {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 24px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: var(--light-surface);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: var(--gradient-primary);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .safety-section {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--success-green);
+        }
+
+        .safety-title {
+            font-weight: 700;
+            color: var(--success-green);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .certificate-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cert-name {
+            font-weight: 600;
+        }
+
+        .cert-date {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .menu-section {
+            margin-top: 1.5rem;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--light-surface);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .item-name {
+            font-weight: 600;
+        }
+
+        .item-price {
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.85rem 1.25rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-full {
+            width: 100%;
+            padding: 1.1rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-full:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Payment Icons */
+        .payment-methods {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .payment-icon {
+            background: var(--light-surface);
+            padding: 0.5rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--deep-teal);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .weather-content {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .weather-info {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .weather-details {
+                width: 100%;
+                justify-content: space-between;
+                gap: 0.5rem;
+            }
+
+            .detail-item {
+                font-size: 0.85rem;
+                padding: 0.5rem 0.75rem;
+            }
+
+            .trucks-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Animations for stagger */
+        .truck-card {
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .truck-card:nth-child(1) { animation-delay: 0.5s; }
+        .truck-card:nth-child(2) { animation-delay: 0.6s; }
+        .truck-card:nth-child(3) { animation-delay: 0.7s; }
+        .truck-card:nth-child(4) { animation-delay: 0.8s; }
+        .truck-card:nth-child(5) { animation-delay: 0.9s; }
+        .truck-card:nth-child(6) { animation-delay: 1s; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🚐</div>
+                <span>TruckSpot</span>
+            </div>
+            <nav>
+                <div class="language-selector">
+                    <span class="lang-icon">🌐</span>
+                    <select class="language-select" id="languageSelect" onchange="changeLanguage()">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="ar">العربية</option>
+                    </select>
+                </div>
+                <button class="nav-btn" onclick="scrollToSection('trucks')">Find Trucks</button>
+                <button class="nav-btn" onclick="scrollToSection('events')">Events</button>
+                <button class="nav-btn primary" onclick="openModal('vendorModal')">Vendor Login</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Weather & Location Bar -->
+    <div class="weather-location-bar">
+        <div class="weather-content">
+            <div class="location-selector">
+                <span class="location-icon">📍</span>
+                <select class="location-select" id="citySelect" onchange="changeCity()">
+                    <option value="tucson">Tucson, AZ</option>
+                    <option value="nyc">New York, NY</option>
+                    <option value="la">Los Angeles, CA</option>
+                    <option value="chicago">Chicago, IL</option>
+                    <option value="houston">Houston, TX</option>
+                    <option value="phoenix">Phoenix, AZ</option>
+                    <option value="miami">Miami, FL</option>
+                    <option value="seattle">Seattle, WA</option>
+                    <option value="boston">Boston, MA</option>
+                    <option value="denver">Denver, CO</option>
+                </select>
+            </div>
+            <div class="weather-info">
+                <div class="current-weather">
+                    <span class="weather-icon" id="weatherIcon">☀️</span>
+                    <span class="temperature" id="temperature">72°F</span>
+                    <span class="weather-desc" id="weatherDesc">Sunny</span>
+                </div>
+                <div class="weather-details">
+                    <span class="detail-item">
+                        <span class="detail-icon">💧</span>
+                        <span id="rainChance">5%</span> rain
+                    </span>
+                    <span class="detail-item">
+                        <span class="detail-icon">📅</span>
+                        <span id="currentDay">Friday</span>
+                    </span>
+                    <span class="detail-item">
+                        <span class="detail-icon">🕐</span>
+                        <span id="currentTime">2:30 PM</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- View Switcher -->
+        <div class="view-switcher">
+            <div class="view-tab active" onclick="switchView('customer')">🍔 Customer View</div>
+            <div class="view-tab" onclick="switchView('vendor')">🚐 Vendor Dashboard</div>
+        </div>
+
+        <!-- Customer View -->
+        <div id="customerView" class="customer-view">
+            <!-- Search Section -->
+            <div class="search-section" id="trucks">
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search food trucks, cuisines, or locations..." id="searchInput">
+                    <button class="search-btn" onclick="searchTrucks()">Search</button>
+                </div>
+                <div class="filters">
+                    <div class="filter-chip" onclick="filterTrucks('all')">All Trucks</div>
+                    <div class="filter-chip" onclick="filterTrucks('open')">Open Now</div>
+                    <div class="filter-chip" onclick="filterTrucks('certified')">Safety Certified</div>
+                    <div class="filter-chip" onclick="filterTrucks('mexican')">Mexican</div>
+                    <div class="filter-chip" onclick="filterTrucks('asian')">Asian</div>
+                    <div class="filter-chip" onclick="filterTrucks('middle eastern')">Middle Eastern</div>
+                    <div class="filter-chip" onclick="filterTrucks('bbq')">BBQ</div>
+                    <div class="filter-chip" onclick="filterTrucks('vegan')">Vegan</div>
+                </div>
+            </div>
+
+            <!-- Trucks Grid -->
+            <div class="trucks-grid" id="trucksGrid"></div>
+
+            <!-- Events Section -->
+            <div class="events-section" id="events">
+                <h2 class="section-title">📍 Popular Events & Gatherings</h2>
+                <div class="event-card" onclick="showEventDetails('Football Game')">
+                    <div class="event-header">
+                        <div>
+                            <div class="event-name">University Football Game</div>
+                            <div class="event-details">📅 Saturday, 6:00 PM • Stadium District</div>
+                        </div>
+                        <div class="event-crowd">15,000+ expected</div>
+                    </div>
+                    <div class="event-details">Major home game with high foot traffic. 8 trucks already registered.</div>
+                </div>
+
+                <div class="event-card" onclick="showEventDetails('Music Festival')">
+                    <div class="event-header">
+                        <div>
+                            <div class="event-name">Downtown Music Festival</div>
+                            <div class="event-details">📅 Friday-Sunday • Central Park</div>
+                        </div>
+                        <div class="event-crowd">25,000+ expected</div>
+                    </div>
+                    <div class="event-details">3-day festival featuring local bands. Premium vendor spots available.</div>
+                </div>
+
+                <div class="event-card" onclick="showEventDetails('Farmers Market')">
+                    <div class="event-header">
+                        <div>
+                            <div class="event-name">Weekly Farmers Market</div>
+                            <div class="event-details">📅 Every Sunday, 8:00 AM • Market Square</div>
+                        </div>
+                        <div class="event-crowd">5,000+ weekly</div>
+                    </div>
+                    <div class="event-details">Regular weekly market with loyal customer base. 12 trucks registered.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vendor Dashboard -->
+        <div id="vendorView" class="dashboard">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Today's Revenue</div>
+                    <div class="stat-value">$1,247</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Orders</div>
+                    <div class="stat-value">43</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Safety Rating</div>
+                    <div class="stat-value">A+</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Customer Rating</div>
+                    <div class="stat-value">4.8★</div>
+                </div>
+            </div>
+
+            <div class="search-section">
+                <h2 class="section-title">🎯 Your Truck Profile</h2>
+                <form id="vendorForm">
+                    <div class="form-group">
+                        <label class="form-label">Truck Name</label>
+                        <input type="text" class="form-input" value="Taco Paradise" placeholder="Enter truck name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Current Location</label>
+                        <input type="text" class="form-input" value="Stadium District, Main St & 5th Ave" placeholder="Update your location">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-select">
+                            <option>Open Now</option>
+                            <option>Closed</option>
+                            <option>On the way</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Safety Certifications</label>
+                        <div class="safety-section">
+                            <div class="certificate-item">
+                                <div>
+                                    <div class="cert-name">Food Handler's Certificate</div>
+                                    <div class="cert-date">Valid until: Dec 2025</div>
+                                </div>
+                                <span style="color: var(--success-green); font-size: 1.5rem;">✓</span>
+                            </div>
+                            <div class="certificate-item">
+                                <div>
+                                    <div class="cert-name">Health Department A+ Rating</div>
+                                    <div class="cert-date">Last inspection: Nov 2024</div>
+                                </div>
+                                <span style="color: var(--success-green); font-size: 1.5rem;">✓</span>
+                            </div>
+                            <div class="certificate-item">
+                                <div>
+                                    <div class="cert-name">Food Safety Training</div>
+                                    <div class="cert-date">Completed: Oct 2024</div>
+                                </div>
+                                <span style="color: var(--success-green); font-size: 1.5rem;">✓</span>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-full" style="margin-top: 1rem;" onclick="openModal('certModal')">Upload New Certificate</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="events-section">
+                <h2 class="section-title">🎪 Register for Events</h2>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Join popular events to maximize your reach and revenue</p>
+                
+                <div class="event-card">
+                    <div class="event-header">
+                        <div>
+                            <div class="event-name">University Football Game</div>
+                            <div class="event-details">📅 Saturday, 6:00 PM • 15,000+ expected</div>
+                        </div>
+                        <button class="truck-btn primary" onclick="registerEvent('Football')">Register</button>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-header">
+                        <div>
+                            <div class="event-name">Downtown Music Festival</div>
+                            <div class="event-details">📅 Friday-Sunday • 25,000+ expected</div>
+                        </div>
+                        <button class="truck-btn primary" onclick="registerEvent('Festival')">Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Truck Details Modal -->
+    <div id="truckModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTruckName">Truck Details</h2>
+                <button class="close-btn" onclick="closeModal('truckModal')">×</button>
+            </div>
+            
+            <div class="safety-section">
+                <div class="safety-title">🛡️ Safety & Hygiene Certifications</div>
+                <div class="certificate-item">
+                    <div>
+                        <div class="cert-name">Food Handler's Certificate</div>
+                        <div class="cert-date">Valid until: Dec 2025</div>
+                    </div>
+                    <span style="color: var(--success-green); font-size: 1.5rem;">✓</span>
+                </div>
+                <div class="certificate-item">
+                    <div>
+                        <div class="cert-name">Health Department A+ Rating</div>
+                        <div class="cert-date">Last inspection: Nov 2024</div>
+                    </div>
+                    <span style="color: var(--success-green); font-size: 1.5rem;">✓</span>
+                </div>
+                <div class="certificate-item">
+                    <div>
+                        <div class="cert-name">Food Safety Training</div>
+                        <div class="cert-date">Completed: Oct 2024</div>
+                    </div>
+                    <span style="color: var(--success-green); font-size: 1.5rem;">✓</span>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 700; margin-bottom: 1rem;">Menu</h3>
+                <div class="menu-item">
+                    <div>
+                        <div class="item-name">Classic Street Taco</div>
+                        <div style="color: #64748b; font-size: 0.85rem;">Grilled meat, onions, cilantro, lime</div>
+                    </div>
+                    <div class="item-price">$3.50</div>
+                </div>
+                <div class="menu-item">
+                    <div>
+                        <div class="item-name">Burrito Supreme</div>
+                        <div style="color: #64748b; font-size: 0.85rem;">Rice, beans, meat, cheese, salsa</div>
+                    </div>
+                    <div class="item-price">$8.99</div>
+                </div>
+                <div class="menu-item">
+                    <div>
+                        <div class="item-name">Quesadilla</div>
+                        <div style="color: #64748b; font-size: 0.85rem;">Melted cheese, choice of protein</div>
+                    </div>
+                    <div class="item-price">$6.50</div>
+                </div>
+                <div class="menu-item">
+                    <div>
+                        <div class="item-name">Elote (Street Corn)</div>
+                        <div style="color: #64748b; font-size: 0.85rem;">Mayo, cheese, chili powder, lime</div>
+                    </div>
+                    <div class="item-price">$4.00</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem;">
+                <h4 style="font-weight: 700; margin-bottom: 0.75rem;">Payment Methods</h4>
+                <div class="payment-methods">
+                    <span class="payment-icon">💳 Card</span>
+                    <span class="payment-icon">💵 Cash</span>
+                    <span class="payment-icon">📱 Venmo</span>
+                    <span class="payment-icon">🔷 PayPal</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem;">
+                <div style="color: #64748b; margin-bottom: 0.5rem;">
+                    <strong>Location:</strong> Stadium District, Main St & 5th Ave
+                </div>
+                <div style="color: #64748b;">
+                    <strong>Hours:</strong> Mon-Sat 11:00 AM - 9:00 PM
+                </div>
+            </div>
+
+            <button class="btn-full" style="margin-top: 1.5rem;" onclick="orderNow()">Order Now</button>
+        </div>
+    </div>
+
+    <!-- Vendor Login Modal -->
+    <div id="vendorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Vendor Login</h2>
+                <button class="close-btn" onclick="closeModal('vendorModal')">×</button>
+            </div>
+            
+            <form>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="vendor@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" placeholder="Enter your password">
+                </div>
+                <button type="button" class="btn-full" onclick="vendorLogin()">Login</button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 1.5rem; color: #64748b;">
+                New vendor? <a href="#" style="color: var(--primary-blue); font-weight: 600;" onclick="alert('Registration form would open here')">Sign up here</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Upload Modal -->
+    <div id="certModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Upload Certificate</h2>
+                <button class="close-btn" onclick="closeModal('certModal')">×</button>
+            </div>
+            
+            <form>
+                <div class="form-group">
+                    <label class="form-label">Certificate Type</label>
+                    <select class="form-select">
+                        <option>Food Handler's Certificate</option>
+                        <option>Health Inspection Report</option>
+                        <option>Food Safety Training</option>
+                        <option>Business License</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Expiration Date</label>
+                    <input type="date" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Upload Document</label>
+                    <input type="file" class="form-input" accept=".pdf,.jpg,.png">
+                </div>
+                <button type="button" class="btn-full" onclick="uploadCert()">Upload Certificate</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                findTrucks: "Find Trucks",
+                events: "Events",
+                vendorLogin: "Vendor Login",
+                customerView: "🍔 Customer View",
+                vendorDashboard: "🚐 Vendor Dashboard",
+                searchPlaceholder: "Search food trucks, cuisines, or locations...",
+                searchBtn: "Search",
+                allTrucks: "All Trucks",
+                openNow: "Open Now",
+                safetyCertified: "Safety Certified",
+                viewMenu: "View Menu",
+                directions: "Directions",
+                popularEvents: "📍 Popular Events & Gatherings",
+                expected: "expected",
+                todayRevenue: "Today's Revenue",
+                totalOrders: "Total Orders",
+                safetyRating: "Safety Rating",
+                customerRating: "Customer Rating",
+                yourProfile: "🎯 Your Truck Profile",
+                truckName: "Truck Name",
+                currentLocation: "Current Location",
+                status: "Status",
+                safetyCertifications: "Safety Certifications",
+                uploadCertificate: "Upload New Certificate",
+                registerEvents: "🎪 Register for Events",
+                register: "Register",
+                safetyHygiene: "🛡️ Safety & Hygiene Certifications",
+                menu: "Menu",
+                paymentMethods: "Payment Methods",
+                location: "Location",
+                hours: "Hours",
+                orderNow: "Order Now",
+                rain: "rain"
+            },
+            es: {
+                findTrucks: "Buscar Camiones",
+                events: "Eventos",
+                vendorLogin: "Acceso Vendedor",
+                customerView: "🍔 Vista Cliente",
+                vendorDashboard: "🚐 Panel Vendedor",
+                searchPlaceholder: "Buscar camiones de comida, cocinas o ubicaciones...",
+                searchBtn: "Buscar",
+                allTrucks: "Todos los Camiones",
+                openNow: "Abierto Ahora",
+                safetyCertified: "Certificado de Seguridad",
+                viewMenu: "Ver Menú",
+                directions: "Direcciones",
+                popularEvents: "📍 Eventos y Reuniones Populares",
+                expected: "esperados",
+                todayRevenue: "Ingresos de Hoy",
+                totalOrders: "Pedidos Totales",
+                safetyRating: "Calificación de Seguridad",
+                customerRating: "Calificación del Cliente",
+                yourProfile: "🎯 Tu Perfil de Camión",
+                truckName: "Nombre del Camión",
+                currentLocation: "Ubicación Actual",
+                status: "Estado",
+                safetyCertifications: "Certificaciones de Seguridad",
+                uploadCertificate: "Subir Nuevo Certificado",
+                registerEvents: "🎪 Registrarse para Eventos",
+                register: "Registrarse",
+                safetyHygiene: "🛡️ Certificaciones de Seguridad e Higiene",
+                menu: "Menú",
+                paymentMethods: "Métodos de Pago",
+                location: "Ubicación",
+                hours: "Horario",
+                orderNow: "Ordenar Ahora",
+                rain: "lluvia"
+            },
+            fr: {
+                findTrucks: "Trouver Camions",
+                events: "Événements",
+                vendorLogin: "Connexion Vendeur",
+                customerView: "🍔 Vue Client",
+                vendorDashboard: "🚐 Tableau de Bord",
+                searchPlaceholder: "Rechercher food trucks, cuisines ou emplacements...",
+                searchBtn: "Rechercher",
+                allTrucks: "Tous les Camions",
+                openNow: "Ouvert Maintenant",
+                safetyCertified: "Certifié Sécurité",
+                viewMenu: "Voir le Menu",
+                directions: "Itinéraire",
+                popularEvents: "📍 Événements et Rassemblements Populaires",
+                expected: "attendus",
+                todayRevenue: "Revenus d'Aujourd'hui",
+                totalOrders: "Commandes Totales",
+                safetyRating: "Note de Sécurité",
+                customerRating: "Note Client",
+                yourProfile: "🎯 Votre Profil de Camion",
+                truckName: "Nom du Camion",
+                currentLocation: "Emplacement Actuel",
+                status: "Statut",
+                safetyCertifications: "Certifications de Sécurité",
+                uploadCertificate: "Télécharger Nouveau Certificat",
+                registerEvents: "🎪 S'inscrire aux Événements",
+                register: "S'inscrire",
+                safetyHygiene: "🛡️ Certifications de Sécurité et d'Hygiène",
+                menu: "Menu",
+                paymentMethods: "Méthodes de Paiement",
+                location: "Emplacement",
+                hours: "Heures",
+                orderNow: "Commander Maintenant",
+                rain: "pluie"
+            },
+            ar: {
+                findTrucks: "البحث عن الشاحنات",
+                events: "الفعاليات",
+                vendorLogin: "تسجيل دخول البائع",
+                customerView: "🍔 عرض العميل",
+                vendorDashboard: "🚐 لوحة البائع",
+                searchPlaceholder: "البحث عن شاحنات الطعام أو المطابخ أو المواقع...",
+                searchBtn: "بحث",
+                allTrucks: "جميع الشاحنات",
+                openNow: "مفتوح الآن",
+                safetyCertified: "معتمد للسلامة",
+                viewMenu: "عرض القائمة",
+                directions: "الاتجاهات",
+                popularEvents: "📍 الفعاليات والتجمعات الشعبية",
+                expected: "متوقع",
+                todayRevenue: "إيرادات اليوم",
+                totalOrders: "إجمالي الطلبات",
+                safetyRating: "تصنيف السلامة",
+                customerRating: "تقييم العملاء",
+                yourProfile: "🎯 ملف الشاحنة الخاص بك",
+                truckName: "اسم الشاحنة",
+                currentLocation: "الموقع الحالي",
+                status: "الحالة",
+                safetyCertifications: "شهادات السلامة",
+                uploadCertificate: "تحميل شهادة جديدة",
+                registerEvents: "🎪 التسجيل في الفعاليات",
+                register: "تسجيل",
+                safetyHygiene: "🛡️ شهادات السلامة والنظافة",
+                menu: "القائمة",
+                paymentMethods: "طرق الدفع",
+                location: "الموقع",
+                hours: "ساعات العمل",
+                orderNow: "اطلب الآن",
+                rain: "مطر"
+            }
+        };
+
+        let currentLang = 'en';
+
+        // Change language
+        function changeLanguage() {
+            currentLang = document.getElementById('languageSelect').value;
+            const t = translations[currentLang];
+            
+            // Update navigation
+            document.querySelectorAll('.nav-btn')[0].textContent = t.findTrucks;
+            document.querySelectorAll('.nav-btn')[1].textContent = t.events;
+            document.querySelectorAll('.nav-btn')[2].textContent = t.vendorLogin;
+            
+            // Update view tabs
+            document.querySelectorAll('.view-tab')[0].textContent = t.customerView;
+            document.querySelectorAll('.view-tab')[1].textContent = t.vendorDashboard;
+            
+            // Update search section
+            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+            document.querySelector('.search-btn').textContent = t.searchBtn;
+            
+            // Update filter chips
+            const filterChips = document.querySelectorAll('.filter-chip');
+            filterChips[0].textContent = t.allTrucks;
+            filterChips[1].textContent = t.openNow;
+            filterChips[2].textContent = t.safetyCertified;
+            
+            // Update events section title
+            const eventTitle = document.querySelector('#events .section-title');
+            if (eventTitle) {
+                eventTitle.textContent = t.popularEvents;
+            }
+            
+            // Update dashboard stats
+            const statLabels = document.querySelectorAll('.stat-label');
+            if (statLabels.length > 0) {
+                statLabels[0].textContent = t.todayRevenue;
+                statLabels[1].textContent = t.totalOrders;
+                statLabels[2].textContent = t.safetyRating;
+                statLabels[3].textContent = t.customerRating;
+            }
+            
+            // Update vendor profile section
+            const vendorSection = document.querySelector('#vendorView .section-title');
+            if (vendorSection) {
+                vendorSection.textContent = t.yourProfile;
+            }
+            
+            // Update rain text
+            const rainElement = document.querySelector('#rainChance');
+            if (rainElement) {
+                const rainValue = rainElement.textContent.replace(/[^\d]/g, '');
+                rainElement.nextSibling.textContent = ' ' + t.rain;
+            }
+            
+            // Re-render trucks to update buttons
+            renderTrucks();
+            
+            // Apply RTL for Arabic
+            if (currentLang === 'ar') {
+                document.body.style.direction = 'rtl';
+                document.documentElement.setAttribute('lang', 'ar');
+            } else {
+                document.body.style.direction = 'ltr';
+                document.documentElement.setAttribute('lang', currentLang);
+            }
+        }
+
+        // Weather data for different cities
+        const weatherData = {
+            tucson: {
+                temp: 72,
+                condition: 'Sunny',
+                icon: '☀️',
+                rain: 5
+            },
+            nyc: {
+                temp: 45,
+                condition: 'Cloudy',
+                icon: '☁️',
+                rain: 30
+            },
+            la: {
+                temp: 68,
+                condition: 'Partly Cloudy',
+                icon: '⛅',
+                rain: 10
+            },
+            chicago: {
+                temp: 38,
+                condition: 'Snowy',
+                icon: '❄️',
+                rain: 60
+            },
+            houston: {
+                temp: 75,
+                condition: 'Humid',
+                icon: '🌤️',
+                rain: 20
+            },
+            phoenix: {
+                temp: 78,
+                condition: 'Clear',
+                icon: '☀️',
+                rain: 2
+            },
+            miami: {
+                temp: 82,
+                condition: 'Tropical',
+                icon: '🌴',
+                rain: 25
+            },
+            seattle: {
+                temp: 52,
+                condition: 'Rainy',
+                icon: '🌧️',
+                rain: 75
+            },
+            boston: {
+                temp: 42,
+                condition: 'Windy',
+                icon: '💨',
+                rain: 35
+            },
+            denver: {
+                temp: 48,
+                condition: 'Clear',
+                icon: '⛰️',
+                rain: 15
+            }
+        };
+
+        // Update time and day
+        function updateDateTime() {
+            const now = new Date();
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const day = days[now.getDay()];
+            
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            const timeStr = hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ' ' + ampm;
+            
+            document.getElementById('currentDay').textContent = day;
+            document.getElementById('currentTime').textContent = timeStr;
+        }
+
+        // Change city and update weather
+        function changeCity() {
+            const city = document.getElementById('citySelect').value;
+            const weather = weatherData[city];
+            
+            document.getElementById('temperature').textContent = weather.temp + '°F';
+            document.getElementById('weatherDesc').textContent = weather.condition;
+            document.getElementById('weatherIcon').textContent = weather.icon;
+            document.getElementById('rainChance').textContent = weather.rain + '%';
+            
+            // Update current city and trucks
+            currentCity = city;
+            trucks = allTrucks[currentCity];
+            
+            // Re-render trucks for the new city
+            renderTrucks();
+        }
+
+        // Initialize datetime
+        updateDateTime();
+        setInterval(updateDateTime, 60000); // Update every minute
+
+        // Sample truck data organized by city
+        const allTrucks = {
+            tucson: [
+                {
+                    id: 1,
+                    name: "Taco Paradise",
+                    cuisine: "Mexican",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Stadium District, Main St & 5th Ave",
+                    status: "open",
+                    tags: ["Tacos", "Burritos", "Vegetarian"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "tucson",
+                    icon: "🌮"
+                },
+                {
+                    id: 2,
+                    name: "Sultan's Grill",
+                    cuisine: "Middle Eastern",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "University Blvd & Park Ave",
+                    status: "open",
+                    tags: ["Shawarma", "Falafel", "Halal"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "tucson",
+                    icon: "🥙"
+                },
+                {
+                    id: 3,
+                    name: "Desert BBQ Pit",
+                    cuisine: "BBQ",
+                    rating: 4.7,
+                    safetyRating: "A",
+                    location: "4th Avenue & 6th St",
+                    status: "open",
+                    tags: ["Ribs", "Brisket", "Smoked"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "tucson",
+                    icon: "🍖"
+                },
+                {
+                    id: 4,
+                    name: "Sonoran Hot Dogs",
+                    cuisine: "Mexican",
+                    rating: 4.6,
+                    safetyRating: "A+",
+                    location: "Downtown, Congress St",
+                    status: "open",
+                    tags: ["Hot Dogs", "Bacon-Wrapped", "Local"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "tucson",
+                    icon: "🌭"
+                },
+                {
+                    id: 5,
+                    name: "Thai on Wheels",
+                    cuisine: "Asian",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Speedway & Campbell",
+                    status: "open",
+                    tags: ["Pad Thai", "Curry", "Spicy"],
+                    certified: true,
+                    payments: ["Card", "Venmo", "PayPal"],
+                    city: "tucson",
+                    icon: "🍜"
+                },
+                {
+                    id: 6,
+                    name: "Green Desert Bowl",
+                    cuisine: "Vegan",
+                    rating: 4.5,
+                    safetyRating: "A+",
+                    location: "University Ave & 7th St",
+                    status: "closed",
+                    tags: ["Organic", "Gluten-Free", "Bowls"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "tucson",
+                    icon: "🥗"
+                },
+                {
+                    id: 7,
+                    name: "Cactus Pizza Mobile",
+                    cuisine: "Italian",
+                    rating: 4.4,
+                    safetyRating: "A",
+                    location: "Grant Rd & Oracle",
+                    status: "open",
+                    tags: ["Wood-Fired", "Artisan", "Neapolitan"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "tucson",
+                    icon: "🍕"
+                },
+                {
+                    id: 8,
+                    name: "Seoul Kitchen Tucson",
+                    cuisine: "Korean",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Catalina Hwy & Tanque Verde",
+                    status: "open",
+                    tags: ["BBQ", "Kimchi", "Bibimbap"],
+                    certified: true,
+                    payments: ["Card", "Cash", "PayPal"],
+                    city: "tucson",
+                    icon: "🍱"
+                },
+                {
+                    id: 9,
+                    name: "Beirut Express",
+                    cuisine: "Middle Eastern",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Oracle Rd & Ina",
+                    status: "open",
+                    tags: ["Lebanese", "Tabbouleh", "Fresh"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "tucson",
+                    icon: "🥙"
+                },
+                {
+                    id: 10,
+                    name: "Pho Saigon Street",
+                    cuisine: "Vietnamese",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "22nd St & Kolb",
+                    status: "open",
+                    tags: ["Pho", "Banh Mi", "Spring Rolls"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Zelle"],
+                    city: "tucson",
+                    icon: "🍲"
+                },
+                {
+                    id: 11,
+                    name: "Arizona Burger Bus",
+                    cuisine: "American",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "Wilmot & Broadway",
+                    status: "open",
+                    tags: ["Burgers", "Fries", "Shakes"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Apple Pay"],
+                    city: "tucson",
+                    icon: "🍔"
+                },
+                {
+                    id: 12,
+                    name: "Guadalajara Grill",
+                    cuisine: "Mexican",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "South 6th Ave",
+                    status: "closed",
+                    tags: ["Tacos", "Quesadillas", "Authentic"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "tucson",
+                    icon: "🌮"
+                },
+                {
+                    id: 13,
+                    name: "Budget Bites Wagon",
+                    cuisine: "American",
+                    rating: 3.8,
+                    safetyRating: "B",
+                    location: "Grant Rd & Stone Ave",
+                    status: "open",
+                    tags: ["Cheap Eats", "Quick", "Basic"],
+                    certified: false,
+                    payments: ["Cash"],
+                    city: "tucson",
+                    icon: "🍟"
+                },
+                {
+                    id: 14,
+                    name: "Joe's Corner Cart",
+                    cuisine: "Mexican",
+                    rating: 3.5,
+                    safetyRating: "C",
+                    location: "South Tucson, 6th Ave",
+                    status: "open",
+                    tags: ["Street Food", "Cash Only"],
+                    certified: false,
+                    payments: ["Cash"],
+                    city: "tucson",
+                    icon: "🌮"
+                }
+            ],
+            nyc: [
+                {
+                    id: 101,
+                    name: "Manhattan Halal Cart",
+                    cuisine: "Middle Eastern",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "53rd & 6th Ave",
+                    status: "open",
+                    tags: ["Halal", "Chicken Rice", "Lamb"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "nyc",
+                    icon: "🥙"
+                },
+                {
+                    id: 102,
+                    name: "Brooklyn Taco Truck",
+                    cuisine: "Mexican",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Williamsburg, Bedford Ave",
+                    status: "open",
+                    tags: ["Tacos", "Quesadillas", "Fresh"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "nyc",
+                    icon: "🌮"
+                },
+                {
+                    id: 103,
+                    name: "The Big Apple Pizza Van",
+                    cuisine: "Italian",
+                    rating: 4.8,
+                    safetyRating: "A",
+                    location: "Times Square, 42nd St",
+                    status: "open",
+                    tags: ["NY-Style", "Slices", "Classic"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "nyc",
+                    icon: "🍕"
+                },
+                {
+                    id: 104,
+                    name: "Seoul on Wheels NYC",
+                    cuisine: "Korean",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "K-Town, 32nd St",
+                    status: "open",
+                    tags: ["BBQ", "Kimchi", "Fusion"],
+                    certified: true,
+                    payments: ["Card", "Venmo", "PayPal"],
+                    city: "nyc",
+                    icon: "🍱"
+                },
+                {
+                    id: 105,
+                    name: "Vegan Vibes Truck",
+                    cuisine: "Vegan",
+                    rating: 4.6,
+                    safetyRating: "A+",
+                    location: "Union Square",
+                    status: "open",
+                    tags: ["Plant-Based", "Organic", "Healthy"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "nyc",
+                    icon: "🥗"
+                },
+                {
+                    id: 106,
+                    name: "Queens BBQ Express",
+                    cuisine: "BBQ",
+                    rating: 4.7,
+                    safetyRating: "A",
+                    location: "Queens Blvd, Elmhurst",
+                    status: "open",
+                    tags: ["Ribs", "Pulled Pork", "Smoked"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "nyc",
+                    icon: "🍖"
+                },
+                {
+                    id: 107,
+                    name: "Pho Brooklyn",
+                    cuisine: "Vietnamese",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Sunset Park, 8th Ave",
+                    status: "open",
+                    tags: ["Pho", "Banh Mi", "Authentic"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Zelle"],
+                    city: "nyc",
+                    icon: "🍲"
+                },
+                {
+                    id: 108,
+                    name: "Sahara Street Food NYC",
+                    cuisine: "Middle Eastern",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "East Village, St Marks",
+                    status: "open",
+                    tags: ["Falafel", "Shawarma", "Hummus"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Apple Pay"],
+                    city: "nyc",
+                    icon: "🧆"
+                },
+                {
+                    id: 109,
+                    name: "NY Lobster Roll",
+                    cuisine: "American",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Financial District, Wall St",
+                    status: "closed",
+                    tags: ["Seafood", "Lobster", "Premium"],
+                    certified: true,
+                    payments: ["Card", "Apple Pay"],
+                    city: "nyc",
+                    icon: "🦞"
+                },
+                {
+                    id: 110,
+                    name: "Chinatown Dumpling Cart",
+                    cuisine: "Asian",
+                    rating: 4.7,
+                    safetyRating: "A",
+                    location: "Canal St, Chinatown",
+                    status: "open",
+                    tags: ["Dumplings", "Dim Sum", "Chinese"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "nyc",
+                    icon: "🥟"
+                },
+                {
+                    id: 111,
+                    name: "Bronx Soul Food",
+                    cuisine: "American",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "Grand Concourse, Bronx",
+                    status: "open",
+                    tags: ["Soul Food", "Comfort", "Southern"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "nyc",
+                    icon: "🍗"
+                },
+                {
+                    id: 112,
+                    name: "Mediterranean Express",
+                    cuisine: "Middle Eastern",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Columbus Circle",
+                    status: "open",
+                    tags: ["Mezze", "Greek", "Mediterranean"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "nyc",
+                    icon: "🥙"
+                },
+                {
+                    id: 113,
+                    name: "Harlem Hot Chicken",
+                    cuisine: "American",
+                    rating: 4.8,
+                    safetyRating: "A",
+                    location: "125th St, Harlem",
+                    status: "open",
+                    tags: ["Fried Chicken", "Spicy", "Southern"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "nyc",
+                    icon: "🍗"
+                },
+                {
+                    id: 114,
+                    name: "SoHo Crepe Cart",
+                    cuisine: "French",
+                    rating: 4.5,
+                    safetyRating: "A+",
+                    location: "Spring St, SoHo",
+                    status: "open",
+                    tags: ["Crepes", "Sweet", "Savory"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "nyc",
+                    icon: "🥞"
+                },
+                {
+                    id: 115,
+                    name: "Staten Island Pasta Truck",
+                    cuisine: "Italian",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "Staten Island Ferry Terminal",
+                    status: "closed",
+                    tags: ["Pasta", "Italian", "Fresh"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "nyc",
+                    icon: "🍝"
+                }
+            ],
+            la: [
+                {
+                    id: 201,
+                    name: "Venice Beach Tacos",
+                    cuisine: "Mexican",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Venice Beach Boardwalk",
+                    status: "open",
+                    tags: ["Fish Tacos", "Burritos", "Beachside"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "la",
+                    icon: "🌮"
+                },
+                {
+                    id: 202,
+                    name: "Hollywood Halal",
+                    cuisine: "Middle Eastern",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Hollywood Blvd & Highland",
+                    status: "open",
+                    tags: ["Halal", "Shawarma", "Mediterranean"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Apple Pay"],
+                    city: "la",
+                    icon: "🥙"
+                },
+                {
+                    id: 203,
+                    name: "Kogi BBQ",
+                    cuisine: "Korean",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Various Locations - Follow on Twitter",
+                    status: "open",
+                    tags: ["Korean-Mexican", "Fusion", "Famous"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "la",
+                    icon: "🍱"
+                },
+                {
+                    id: 204,
+                    name: "Santa Monica Vegan",
+                    cuisine: "Vegan",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Santa Monica Pier",
+                    status: "open",
+                    tags: ["Plant-Based", "Organic", "Bowls"],
+                    certified: true,
+                    payments: ["Card", "Venmo", "PayPal"],
+                    city: "la",
+                    icon: "🥗"
+                },
+                {
+                    id: 205,
+                    name: "Downtown LA Pizza",
+                    cuisine: "Italian",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "Grand Central Market",
+                    status: "open",
+                    tags: ["Wood-Fired", "Artisan", "Craft"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "la",
+                    icon: "🍕"
+                },
+                {
+                    id: 206,
+                    name: "Little Tokyo Ramen",
+                    cuisine: "Asian",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Little Tokyo, 1st St",
+                    status: "open",
+                    tags: ["Ramen", "Japanese", "Authentic"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Zelle"],
+                    city: "la",
+                    icon: "🍜"
+                },
+                {
+                    id: 207,
+                    name: "Beverly Hills Gourmet",
+                    cuisine: "French",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Rodeo Drive",
+                    status: "closed",
+                    tags: ["Gourmet", "Upscale", "French"],
+                    certified: true,
+                    payments: ["Card", "Apple Pay"],
+                    city: "la",
+                    icon: "🥐"
+                },
+                {
+                    id: 208,
+                    name: "The Grilled Cheese Truck",
+                    cuisine: "American",
+                    rating: 4.7,
+                    safetyRating: "A",
+                    location: "Various Locations - Check Schedule",
+                    status: "open",
+                    tags: ["Grilled Cheese", "Comfort", "Classic"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "la",
+                    icon: "🧀"
+                },
+                {
+                    id: 209,
+                    name: "Pho Saigon LA",
+                    cuisine: "Vietnamese",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Westminster, Little Saigon",
+                    status: "open",
+                    tags: ["Pho", "Vietnamese", "Traditional"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "la",
+                    icon: "🍲"
+                },
+                {
+                    id: 210,
+                    name: "Cali BBQ Smoker",
+                    cuisine: "BBQ",
+                    rating: 4.7,
+                    safetyRating: "A",
+                    location: "Long Beach, Ocean Blvd",
+                    status: "open",
+                    tags: ["BBQ", "Tri-Tip", "California-Style"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "la",
+                    icon: "🍖"
+                },
+                {
+                    id: 211,
+                    name: "El Matador Taqueria",
+                    cuisine: "Mexican",
+                    rating: 4.6,
+                    safetyRating: "A+",
+                    location: "East LA, Cesar Chavez Ave",
+                    status: "open",
+                    tags: ["Tacos", "Authentic", "Traditional"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "la",
+                    icon: "🌮"
+                },
+                {
+                    id: 212,
+                    name: "Pasadena Falafel",
+                    cuisine: "Middle Eastern",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Old Town Pasadena",
+                    status: "open",
+                    tags: ["Falafel", "Vegetarian", "Fresh"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "la",
+                    icon: "🧆"
+                }
+            ],
+            chicago: [
+                {
+                    id: 301,
+                    name: "Chicago Style Hot Dogs",
+                    cuisine: "American",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Navy Pier",
+                    status: "open",
+                    tags: ["Hot Dogs", "Chicago-Style", "Classic"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "chicago",
+                    icon: "🌭"
+                },
+                {
+                    id: 302,
+                    name: "Deep Dish Mobile",
+                    cuisine: "Italian",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Millennium Park",
+                    status: "open",
+                    tags: ["Deep Dish", "Pizza", "Chicago"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "chicago",
+                    icon: "🍕"
+                },
+                {
+                    id: 303,
+                    name: "Pilsen Taco Truck",
+                    cuisine: "Mexican",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "18th St, Pilsen",
+                    status: "open",
+                    tags: ["Tacos", "Authentic", "Mexican"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "chicago",
+                    icon: "🌮"
+                },
+                {
+                    id: 304,
+                    name: "Seoul to Chicago",
+                    cuisine: "Korean",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Lincoln Park",
+                    status: "open",
+                    tags: ["Korean BBQ", "Fusion", "Kimchi"],
+                    certified: true,
+                    payments: ["Card", "Venmo", "PayPal"],
+                    city: "chicago",
+                    icon: "🍱"
+                },
+                {
+                    id: 305,
+                    name: "Windy City BBQ",
+                    cuisine: "BBQ",
+                    rating: 4.9,
+                    safetyRating: "A",
+                    location: "Wicker Park",
+                    status: "open",
+                    tags: ["Ribs", "Brisket", "Smoked"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "chicago",
+                    icon: "🍖"
+                },
+                {
+                    id: 306,
+                    name: "Mediterranean Chicago",
+                    cuisine: "Middle Eastern",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Devon Ave",
+                    status: "open",
+                    tags: ["Shawarma", "Halal", "Mediterranean"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "chicago",
+                    icon: "🥙"
+                },
+                {
+                    id: 307,
+                    name: "Chi-Town Pho",
+                    cuisine: "Vietnamese",
+                    rating: 4.6,
+                    safetyRating: "A+",
+                    location: "Argyle St, Uptown",
+                    status: "open",
+                    tags: ["Pho", "Vietnamese", "Banh Mi"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "chicago",
+                    icon: "🍲"
+                },
+                {
+                    id: 308,
+                    name: "The Loop Lobster",
+                    cuisine: "American",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "The Loop, State St",
+                    status: "closed",
+                    tags: ["Lobster Rolls", "Seafood", "Premium"],
+                    certified: true,
+                    payments: ["Card", "Apple Pay"],
+                    city: "chicago",
+                    icon: "🦞"
+                },
+                {
+                    id: 309,
+                    name: "Italian Beef Mobile",
+                    cuisine: "Italian",
+                    rating: 4.9,
+                    safetyRating: "A",
+                    location: "River North",
+                    status: "open",
+                    tags: ["Italian Beef", "Sandwiches", "Classic"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "chicago",
+                    icon: "🥪"
+                },
+                {
+                    id: 310,
+                    name: "Green Chicago Bowl",
+                    cuisine: "Vegan",
+                    rating: 4.5,
+                    safetyRating: "A+",
+                    location: "Logan Square",
+                    status: "open",
+                    tags: ["Vegan", "Plant-Based", "Organic"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "chicago",
+                    icon: "🥗"
+                }
+            ],
+            houston: [
+                {
+                    id: 401,
+                    name: "H-Town Tacos",
+                    cuisine: "Mexican",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Downtown, Main St",
+                    status: "open",
+                    tags: ["Breakfast Tacos", "Tex-Mex", "Local"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "houston",
+                    icon: "🌮"
+                },
+                {
+                    id: 402,
+                    name: "Texas BBQ Wagon",
+                    cuisine: "BBQ",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Memorial Park",
+                    status: "open",
+                    tags: ["Texas BBQ", "Brisket", "Smoked"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "houston",
+                    icon: "🍖"
+                },
+                {
+                    id: 403,
+                    name: "Galveston Seafood Truck",
+                    cuisine: "American",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Galleria Area",
+                    status: "open",
+                    tags: ["Seafood", "Cajun", "Gulf Coast"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Zelle"],
+                    city: "houston",
+                    icon: "🦐"
+                },
+                {
+                    id: 404,
+                    name: "Pho Houston",
+                    cuisine: "Vietnamese",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Midtown, Travis St",
+                    status: "open",
+                    tags: ["Pho", "Vietnamese", "Authentic"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "houston",
+                    icon: "🍲"
+                },
+                {
+                    id: 405,
+                    name: "Halal Houston",
+                    cuisine: "Middle Eastern",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Hillcroft Ave",
+                    status: "open",
+                    tags: ["Halal", "Shawarma", "Mediterranean"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "houston",
+                    icon: "🥙"
+                },
+                {
+                    id: 406,
+                    name: "Seoul Kitchen Houston",
+                    cuisine: "Korean",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "Rice Village",
+                    status: "open",
+                    tags: ["Korean", "BBQ", "Kimchi"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "houston",
+                    icon: "🍱"
+                },
+                {
+                    id: 407,
+                    name: "Montrose Pizza Truck",
+                    cuisine: "Italian",
+                    rating: 4.5,
+                    safetyRating: "A",
+                    location: "Montrose, Westheimer",
+                    status: "closed",
+                    tags: ["Pizza", "Italian", "Wood-Fired"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "houston",
+                    icon: "🍕"
+                },
+                {
+                    id: 408,
+                    name: "Sugar Land Sweets",
+                    cuisine: "American",
+                    rating: 4.6,
+                    safetyRating: "A+",
+                    location: "Sugar Land Town Square",
+                    status: "open",
+                    tags: ["Desserts", "Ice Cream", "Sweet"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "houston",
+                    icon: "🍦"
+                },
+                {
+                    id: 409,
+                    name: "El Pollo Loco Houston",
+                    cuisine: "Mexican",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "East End, Navigation",
+                    status: "open",
+                    tags: ["Chicken", "Mexican", "Grilled"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "houston",
+                    icon: "🍗"
+                },
+                {
+                    id: 410,
+                    name: "Thai Street Houston",
+                    cuisine: "Asian",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Heights, 19th St",
+                    status: "open",
+                    tags: ["Thai", "Pad Thai", "Curry"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "houston",
+                    icon: "🍜"
+                }
+            ],
+            phoenix: [
+                {
+                    id: 501,
+                    name: "Phoenix Fire Tacos",
+                    cuisine: "Mexican",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Downtown Phoenix",
+                    status: "open",
+                    tags: ["Tacos", "Spicy", "Sonoran"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "phoenix",
+                    icon: "🌮"
+                },
+                {
+                    id: 502,
+                    name: "Scottsdale Shawarma",
+                    cuisine: "Middle Eastern",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Old Town Scottsdale",
+                    status: "open",
+                    tags: ["Shawarma", "Halal", "Mediterranean"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Apple Pay"],
+                    city: "phoenix",
+                    icon: "🥙"
+                },
+                {
+                    id: 503,
+                    name: "Desert BBQ Master",
+                    cuisine: "BBQ",
+                    rating: 4.7,
+                    safetyRating: "A",
+                    location: "Tempe, Mill Ave",
+                    status: "open",
+                    tags: ["BBQ", "Ribs", "Mesquite"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "phoenix",
+                    icon: "🍖"
+                },
+                {
+                    id: 504,
+                    name: "Valley Pizza Van",
+                    cuisine: "Italian",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "Mesa, Main St",
+                    status: "open",
+                    tags: ["Pizza", "Italian", "Fresh"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "phoenix",
+                    icon: "🍕"
+                },
+                {
+                    id: 505,
+                    name: "Seoul Phoenix",
+                    cuisine: "Korean",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Chandler, Arizona Ave",
+                    status: "open",
+                    tags: ["Korean", "BBQ", "Fusion"],
+                    certified: true,
+                    payments: ["Card", "Venmo", "PayPal"],
+                    city: "phoenix",
+                    icon: "🍱"
+                },
+                {
+                    id: 506,
+                    name: "Pho Valley",
+                    cuisine: "Vietnamese",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Gilbert, Baseline Rd",
+                    status: "open",
+                    tags: ["Pho", "Vietnamese", "Fresh"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "phoenix",
+                    icon: "🍲"
+                },
+                {
+                    id: 507,
+                    name: "Arizona Green Bowl",
+                    cuisine: "Vegan",
+                    rating: 4.5,
+                    safetyRating: "A+",
+                    location: "Arcadia, Indian School Rd",
+                    status: "closed",
+                    tags: ["Vegan", "Healthy", "Organic"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "phoenix",
+                    icon: "🥗"
+                },
+                {
+                    id: 508,
+                    name: "Glendale Gyros",
+                    cuisine: "Middle Eastern",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "Glendale, Westgate",
+                    status: "open",
+                    tags: ["Gyros", "Greek", "Mediterranean"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "phoenix",
+                    icon: "🥙"
+                },
+                {
+                    id: 509,
+                    name: "Peoria Street Food",
+                    cuisine: "American",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Peoria, Bell Rd",
+                    status: "open",
+                    tags: ["Burgers", "Fries", "Classic"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "phoenix",
+                    icon: "🍔"
+                },
+                {
+                    id: 510,
+                    name: "Thai Paradise Phoenix",
+                    cuisine: "Asian",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Paradise Valley",
+                    status: "open",
+                    tags: ["Thai", "Curry", "Noodles"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "phoenix",
+                    icon: "🍜"
+                }
+            ],
+            miami: [
+                {
+                    id: 601,
+                    name: "Havana Street Kitchen",
+                    cuisine: "Cuban",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Little Havana, Calle Ocho",
+                    status: "open",
+                    tags: ["Cuban", "Sandwiches", "Authentic"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "miami",
+                    icon: "🥪"
+                },
+                {
+                    id: 602,
+                    name: "South Beach Tacos",
+                    cuisine: "Mexican",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "South Beach, Ocean Drive",
+                    status: "open",
+                    tags: ["Tacos", "Beachside", "Fresh"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Apple Pay"],
+                    city: "miami",
+                    icon: "🌮"
+                },
+                {
+                    id: 603,
+                    name: "Miami Shawarma King",
+                    cuisine: "Middle Eastern",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Wynwood Arts District",
+                    status: "open",
+                    tags: ["Shawarma", "Halal", "Mediterranean"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "miami",
+                    icon: "🥙"
+                },
+                {
+                    id: 604,
+                    name: "Brickell BBQ",
+                    cuisine: "BBQ",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "Brickell Ave",
+                    status: "open",
+                    tags: ["BBQ", "Ribs", "Smoked"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "miami",
+                    icon: "🍖"
+                },
+                {
+                    id: 605,
+                    name: "Little Haiti Grill",
+                    cuisine: "Caribbean",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Little Haiti, NE 2nd Ave",
+                    status: "open",
+                    tags: ["Haitian", "Caribbean", "Jerk"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "miami",
+                    icon: "🍗"
+                },
+                {
+                    id: 606,
+                    name: "Coconut Grove Pizza",
+                    cuisine: "Italian",
+                    rating: 4.5,
+                    safetyRating: "A",
+                    location: "Coconut Grove",
+                    status: "closed",
+                    tags: ["Pizza", "Italian", "Wood-Fired"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "miami",
+                    icon: "🍕"
+                },
+                {
+                    id: 607,
+                    name: "Pho Miami Beach",
+                    cuisine: "Vietnamese",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Miami Beach, Alton Rd",
+                    status: "open",
+                    tags: ["Pho", "Vietnamese", "Fresh"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Zelle"],
+                    city: "miami",
+                    icon: "🍲"
+                },
+                {
+                    id: 608,
+                    name: "Coral Gables Vegan",
+                    cuisine: "Vegan",
+                    rating: 4.6,
+                    safetyRating: "A+",
+                    location: "Coral Gables, Miracle Mile",
+                    status: "open",
+                    tags: ["Vegan", "Plant-Based", "Healthy"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "miami",
+                    icon: "🥗"
+                },
+                {
+                    id: 609,
+                    name: "Dolphin Mall Arepas",
+                    cuisine: "Venezuelan",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Doral, near Dolphin Mall",
+                    status: "open",
+                    tags: ["Arepas", "Venezuelan", "South American"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "miami",
+                    icon: "🫓"
+                },
+                {
+                    id: 610,
+                    name: "Key Biscayne Seafood",
+                    cuisine: "American",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Key Biscayne",
+                    status: "open",
+                    tags: ["Seafood", "Fresh", "Local"],
+                    certified: true,
+                    payments: ["Card", "Apple Pay"],
+                    city: "miami",
+                    icon: "🦞"
+                }
+            ],
+            seattle: [
+                {
+                    id: 701,
+                    name: "Pike Place Chowder",
+                    cuisine: "American",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Pike Place Market",
+                    status: "open",
+                    tags: ["Chowder", "Seafood", "Seattle"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Apple Pay"],
+                    city: "seattle",
+                    icon: "🥣"
+                },
+                {
+                    id: 702,
+                    name: "Capitol Hill Tacos",
+                    cuisine: "Mexican",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Capitol Hill, Broadway",
+                    status: "open",
+                    tags: ["Tacos", "Mexican", "Late Night"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "seattle",
+                    icon: "🌮"
+                },
+                {
+                    id: 703,
+                    name: "Seattle Shawarma",
+                    cuisine: "Middle Eastern",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "University District",
+                    status: "open",
+                    tags: ["Shawarma", "Halal", "Mediterranean"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "seattle",
+                    icon: "🥙"
+                },
+                {
+                    id: 704,
+                    name: "Ballard BBQ Wagon",
+                    cuisine: "BBQ",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "Ballard, Market St",
+                    status: "open",
+                    tags: ["BBQ", "Smoked", "Local"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "seattle",
+                    icon: "🍖"
+                },
+                {
+                    id: 705,
+                    name: "Fremont Pho",
+                    cuisine: "Vietnamese",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Fremont, N 36th St",
+                    status: "open",
+                    tags: ["Pho", "Vietnamese", "Authentic"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Zelle"],
+                    city: "seattle",
+                    icon: "🍲"
+                },
+                {
+                    id: 706,
+                    name: "Queen Anne Pizza",
+                    cuisine: "Italian",
+                    rating: 4.5,
+                    safetyRating: "A",
+                    location: "Queen Anne, Mercer St",
+                    status: "closed",
+                    tags: ["Pizza", "Italian", "Wood-Fired"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "seattle",
+                    icon: "🍕"
+                },
+                {
+                    id: 707,
+                    name: "Georgetown Korean",
+                    cuisine: "Korean",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Georgetown",
+                    status: "open",
+                    tags: ["Korean", "BBQ", "Fusion"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "seattle",
+                    icon: "🍱"
+                },
+                {
+                    id: 708,
+                    name: "Green Lake Vegan",
+                    cuisine: "Vegan",
+                    rating: 4.6,
+                    safetyRating: "A+",
+                    location: "Green Lake Park",
+                    status: "open",
+                    tags: ["Vegan", "Organic", "Healthy"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "seattle",
+                    icon: "🥗"
+                },
+                {
+                    id: 709,
+                    name: "Wallingford Teriyaki",
+                    cuisine: "Asian",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Wallingford, 45th St",
+                    status: "open",
+                    tags: ["Teriyaki", "Japanese", "Seattle-Style"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "seattle",
+                    icon: "🍱"
+                },
+                {
+                    id: 710,
+                    name: "South Lake Union Lobster",
+                    cuisine: "American",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "South Lake Union",
+                    status: "open",
+                    tags: ["Lobster Rolls", "Seafood", "Premium"],
+                    certified: true,
+                    payments: ["Card", "Apple Pay"],
+                    city: "seattle",
+                    icon: "🦞"
+                }
+            ],
+            boston: [
+                {
+                    id: 801,
+                    name: "Boston Lobster Roll",
+                    cuisine: "American",
+                    rating: 4.9,
+                    safetyRating: "A+",
+                    location: "Faneuil Hall",
+                    status: "open",
+                    tags: ["Lobster", "Seafood", "New England"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Apple Pay"],
+                    city: "boston",
+                    icon: "🦞"
+                },
+                {
+                    id: 802,
+                    name: "North End Pizza Truck",
+                    cuisine: "Italian",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "North End, Hanover St",
+                    status: "open",
+                    tags: ["Pizza", "Italian", "Traditional"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "boston",
+                    icon: "🍕"
+                },
+                {
+                    id: 803,
+                    name: "Fenway Franks",
+                    cuisine: "American",
+                    rating: 4.7,
+                    safetyRating: "A",
+                    location: "Near Fenway Park",
+                    status: "open",
+                    tags: ["Hot Dogs", "Sausages", "Stadium Food"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "boston",
+                    icon: "🌭"
+                },
+                {
+                    id: 804,
+                    name: "Cambridge Falafel",
+                    cuisine: "Middle Eastern",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Harvard Square",
+                    status: "open",
+                    tags: ["Falafel", "Mediterranean", "Vegetarian"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "boston",
+                    icon: "🧆"
+                },
+                {
+                    id: 805,
+                    name: "South Boston BBQ",
+                    cuisine: "BBQ",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "Southie, Broadway",
+                    status: "open",
+                    tags: ["BBQ", "Ribs", "Smoked"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "boston",
+                    icon: "🍖"
+                },
+                {
+                    id: 806,
+                    name: "Chinatown Dim Sum",
+                    cuisine: "Asian",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Chinatown, Beach St",
+                    status: "open",
+                    tags: ["Dim Sum", "Chinese", "Dumplings"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "boston",
+                    icon: "🥟"
+                },
+                {
+                    id: 807,
+                    name: "Back Bay Vegan",
+                    cuisine: "Vegan",
+                    rating: 4.5,
+                    safetyRating: "A+",
+                    location: "Back Bay, Newbury St",
+                    status: "closed",
+                    tags: ["Vegan", "Plant-Based", "Organic"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "boston",
+                    icon: "🥗"
+                },
+                {
+                    id: 808,
+                    name: "Dorchester Tacos",
+                    cuisine: "Mexican",
+                    rating: 4.6,
+                    safetyRating: "A+",
+                    location: "Dorchester, Dot Ave",
+                    status: "open",
+                    tags: ["Tacos", "Mexican", "Authentic"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "boston",
+                    icon: "🌮"
+                },
+                {
+                    id: 809,
+                    name: "Brookline Pho",
+                    cuisine: "Vietnamese",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Brookline, Harvard St",
+                    status: "open",
+                    tags: ["Pho", "Vietnamese", "Fresh"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Zelle"],
+                    city: "boston",
+                    icon: "🍲"
+                },
+                {
+                    id: 810,
+                    name: "Allston Korean",
+                    cuisine: "Korean",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Allston, Harvard Ave",
+                    status: "open",
+                    tags: ["Korean", "BBQ", "Kimchi"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "boston",
+                    icon: "🍱"
+                }
+            ],
+            denver: [
+                {
+                    id: 901,
+                    name: "Mile High Tacos",
+                    cuisine: "Mexican",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Downtown Denver, 16th St Mall",
+                    status: "open",
+                    tags: ["Tacos", "Green Chili", "Local"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "denver",
+                    icon: "🌮"
+                },
+                {
+                    id: 902,
+                    name: "RiNo BBQ Wagon",
+                    cuisine: "BBQ",
+                    rating: 4.7,
+                    safetyRating: "A",
+                    location: "RiNo Art District",
+                    status: "open",
+                    tags: ["BBQ", "Smoked", "Craft"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "denver",
+                    icon: "🍖"
+                },
+                {
+                    id: 903,
+                    name: "Capitol Hill Shawarma",
+                    cuisine: "Middle Eastern",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Capitol Hill, Colfax Ave",
+                    status: "open",
+                    tags: ["Shawarma", "Mediterranean", "Halal"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Apple Pay"],
+                    city: "denver",
+                    icon: "🥙"
+                },
+                {
+                    id: 904,
+                    name: "LoDo Pizza Truck",
+                    cuisine: "Italian",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "LoDo, Larimer Square",
+                    status: "open",
+                    tags: ["Pizza", "Italian", "Wood-Fired"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "denver",
+                    icon: "🍕"
+                },
+                {
+                    id: 905,
+                    name: "Boulder Pho",
+                    cuisine: "Vietnamese",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Pearl St, Boulder",
+                    status: "open",
+                    tags: ["Pho", "Vietnamese", "Fresh"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "denver",
+                    icon: "🍲"
+                },
+                {
+                    id: 906,
+                    name: "Highlands Korean",
+                    cuisine: "Korean",
+                    rating: 4.8,
+                    safetyRating: "A+",
+                    location: "Highlands, 32nd Ave",
+                    status: "open",
+                    tags: ["Korean", "BBQ", "Fusion"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "denver",
+                    icon: "🍱"
+                },
+                {
+                    id: 907,
+                    name: "Five Points Vegan",
+                    cuisine: "Vegan",
+                    rating: 4.5,
+                    safetyRating: "A+",
+                    location: "Five Points, Welton St",
+                    status: "closed",
+                    tags: ["Vegan", "Plant-Based", "Healthy"],
+                    certified: true,
+                    payments: ["Card", "Venmo"],
+                    city: "denver",
+                    icon: "🥗"
+                },
+                {
+                    id: 908,
+                    name: "Cherry Creek Lobster",
+                    cuisine: "American",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Cherry Creek",
+                    status: "open",
+                    tags: ["Lobster Rolls", "Seafood", "Premium"],
+                    certified: true,
+                    payments: ["Card", "Apple Pay"],
+                    city: "denver",
+                    icon: "🦞"
+                },
+                {
+                    id: 909,
+                    name: "Lakewood Burger Bus",
+                    cuisine: "American",
+                    rating: 4.6,
+                    safetyRating: "A",
+                    location: "Lakewood, Wadsworth Blvd",
+                    status: "open",
+                    tags: ["Burgers", "Classic", "Local"],
+                    certified: true,
+                    payments: ["Card", "Cash"],
+                    city: "denver",
+                    icon: "🍔"
+                },
+                {
+                    id: 910,
+                    name: "Aurora Thai Street",
+                    cuisine: "Asian",
+                    rating: 4.7,
+                    safetyRating: "A+",
+                    location: "Aurora, Havana St",
+                    status: "open",
+                    tags: ["Thai", "Curry", "Authentic"],
+                    certified: true,
+                    payments: ["Card", "Cash", "Venmo"],
+                    city: "denver",
+                    icon: "🍜"
+                }
+            ]
+        };
+
+        let currentCity = 'tucson';
+        let trucks = allTrucks[currentCity];
+
+        // Render trucks
+        function renderTrucks(trucksToRender = trucks) {
+            const t = translations[currentLang];
+            const grid = document.getElementById('trucksGrid');
+            grid.innerHTML = trucksToRender.map(truck => {
+                // Determine safety badge color and text
+                let safetyBadgeClass = '';
+                let safetyText = '';
+                if (truck.safetyRating === 'A+' || truck.safetyRating === 'A') {
+                    safetyBadgeClass = 'safety-badge-green';
+                    safetyText = `🛡️ ${truck.safetyRating} Safety`;
+                } else if (truck.safetyRating === 'B') {
+                    safetyBadgeClass = 'safety-badge-yellow';
+                    safetyText = `⚠️ ${truck.safetyRating} Safety`;
+                } else if (truck.safetyRating === 'C' || truck.safetyRating === 'D' || truck.safetyRating === 'F') {
+                    safetyBadgeClass = 'safety-badge-red';
+                    safetyText = `⚠️ ${truck.safetyRating} Safety`;
+                }
+                
+                return `
+                <div class="truck-card" onclick="openTruckDetails(${truck.id})">
+                    <div class="truck-image">
+                        ${truck.icon || '🍔'}
+                        ${truck.certified ? `<div class="safety-badge ${safetyBadgeClass}">${safetyText}</div>` : `<div class="safety-badge ${safetyBadgeClass}">${safetyText}</div>`}
+                        <div class="status-badge ${truck.status === 'closed' ? 'closed' : ''}">${truck.status === 'open' ? '● ' + t.openNow : '● Closed'}</div>
+                    </div>
+                    <div class="truck-content">
+                        <div class="truck-header">
+                            <div>
+                                <div class="truck-name">${truck.name}</div>
+                                <div class="truck-cuisine">${truck.cuisine}</div>
+                            </div>
+                            <div class="truck-rating">★ ${truck.rating}</div>
+                        </div>
+                        <div class="truck-location">📍 ${truck.location}</div>
+                        <div class="truck-tags">
+                            ${truck.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="truck-footer">
+                            <button class="truck-btn primary" onclick="event.stopPropagation(); openTruckDetails(${truck.id})">${t.viewMenu}</button>
+                            <button class="truck-btn secondary" onclick="event.stopPropagation(); getDirections()">${t.directions}</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        // Initial render
+        renderTrucks();
+
+        // Switch between customer and vendor view
+        function switchView(view) {
+            const tabs = document.querySelectorAll('.view-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (view === 'customer') {
+                document.getElementById('customerView').style.display = 'block';
+                document.getElementById('vendorView').classList.remove('active');
+            } else {
+                document.getElementById('customerView').style.display = 'none';
+                document.getElementById('vendorView').classList.add('active');
+            }
+        }
+
+        // Filter trucks
+        function filterTrucks(filter) {
+            const chips = document.querySelectorAll('.filter-chip');
+            chips.forEach(chip => chip.classList.remove('active'));
+            event.target.classList.add('active');
+
+            let filtered = trucks;
+            if (filter === 'open') {
+                filtered = trucks.filter(t => t.status === 'open');
+            } else if (filter === 'certified') {
+                filtered = trucks.filter(t => t.certified);
+            } else if (filter !== 'all') {
+                filtered = trucks.filter(t => 
+                    t.cuisine.toLowerCase() === filter || 
+                    t.tags.some(tag => tag.toLowerCase().includes(filter))
+                );
+            }
+            renderTrucks(filtered);
+        }
+
+        // Search trucks
+        function searchTrucks() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = trucks.filter(t => 
+                t.name.toLowerCase().includes(query) ||
+                t.cuisine.toLowerCase().includes(query) ||
+                t.location.toLowerCase().includes(query) ||
+                t.tags.some(tag => tag.toLowerCase().includes(query))
+            );
+            renderTrucks(filtered);
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function openTruckDetails(truckId) {
+            const t = translations[currentLang];
+            const truck = trucks.find(t => t.id === truckId);
+            document.getElementById('modalTruckName').textContent = truck.name;
+            
+            // Create safety section HTML based on safety rating
+            let safetySectionHTML = '';
+            if (truck.safetyRating === 'A+' || truck.safetyRating === 'A') {
+                safetySectionHTML = `
+                    <div class="safety-section">
+                        <div class="safety-title">${t.safetyHygiene}</div>
+                        <div class="certificate-item">
+                            <div>
+                                <div class="cert-name">Food Handler's Certificate</div>
+                                <div class="cert-date">Valid until: Dec 2025</div>
+                            </div>
+                            <span style="color: var(--success-green); font-size: 1.5rem;">✓</span>
+                        </div>
+                        <div class="certificate-item">
+                            <div>
+                                <div class="cert-name">Health Department ${truck.safetyRating} Rating</div>
+                                <div class="cert-date">Last inspection: Nov 2024</div>
+                            </div>
+                            <span style="color: var(--success-green); font-size: 1.5rem;">✓</span>
+                        </div>
+                        <div class="certificate-item">
+                            <div>
+                                <div class="cert-name">Food Safety Training</div>
+                                <div class="cert-date">Completed: Oct 2024</div>
+                            </div>
+                            <span style="color: var(--success-green); font-size: 1.5rem;">✓</span>
+                        </div>
+                    </div>
+                `;
+            } else if (truck.safetyRating === 'B') {
+                safetySectionHTML = `
+                    <div class="safety-section" style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1)); border-color: var(--accent-yellow);">
+                        <div class="safety-title" style="color: #d97706;">⚠️ ${t.safetyHygiene}</div>
+                        <div class="certificate-item">
+                            <div>
+                                <div class="cert-name">Health Department B Rating</div>
+                                <div class="cert-date">Last inspection: Oct 2024 - Minor violations noted</div>
+                            </div>
+                            <span style="color: var(--accent-yellow); font-size: 1.5rem;">⚠️</span>
+                        </div>
+                        <div class="certificate-item">
+                            <div>
+                                <div class="cert-name">Food Handler's Certificate</div>
+                                <div class="cert-date">Valid - Expires soon: Jan 2025</div>
+                            </div>
+                            <span style="color: var(--accent-yellow); font-size: 1.5rem;">⚠️</span>
+                        </div>
+                        <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(251, 191, 36, 0.2); border-radius: 8px; font-size: 0.9rem;">
+                            <strong>Note:</strong> This vendor has room for improvement in food safety practices. Recent inspection found minor issues that are being addressed.
+                        </div>
+                    </div>
+                `;
+            } else {
+                safetySectionHTML = `
+                    <div class="safety-section" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1)); border-color: #ef4444;">
+                        <div class="safety-title" style="color: #dc2626;">⚠️ ${t.safetyHygiene}</div>
+                        <div class="certificate-item">
+                            <div>
+                                <div class="cert-name">Health Department ${truck.safetyRating} Rating</div>
+                                <div class="cert-date">Last inspection: Sept 2024 - Multiple violations</div>
+                            </div>
+                            <span style="color: #ef4444; font-size: 1.5rem;">✗</span>
+                        </div>
+                        <div class="certificate-item">
+                            <div>
+                                <div class="cert-name">Food Handler's Certificate</div>
+                                <div class="cert-date">Status: Expired or Not Verified</div>
+                            </div>
+                            <span style="color: #ef4444; font-size: 1.5rem;">✗</span>
+                        </div>
+                        <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(239, 68, 68, 0.2); border-radius: 8px; font-size: 0.9rem;">
+                            <strong>⚠️ Warning:</strong> This vendor has significant food safety concerns. Health department violations were found during last inspection. Proceed with caution.
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Update menu based on cuisine type
+            let menuHTML = '';
+            if (truck.cuisine === 'Middle Eastern') {
+                menuHTML = `
+                    <div class="menu-item">
+                        <div>
+                            <div class="item-name">Chicken Shawarma Wrap</div>
+                            <div style="color: #64748b; font-size: 0.85rem;">Marinated chicken, garlic sauce, pickles, tahini</div>
+                        </div>
+                        <div class="item-price">$9.99</div>
+                    </div>
+                    <div class="menu-item">
+                        <div>
+                            <div class="item-name">Falafel Plate</div>
+                            <div style="color: #64748b; font-size: 0.85rem;">Crispy falafel, hummus, salad, pita bread</div>
+                        </div>
+                        <div class="item-price">$8.50</div>
+                    </div>
+                    <div class="menu-item">
+                        <div>
+                            <div class="item-name">Lamb Kebab Platter</div>
+                            <div style="color: #64748b; font-size: 0.85rem;">Grilled lamb, rice, grilled veggies, tzatziki</div>
+                        </div>
+                        <div class="item-price">$12.99</div>
+                    </div>
+                    <div class="menu-item">
+                        <div>
+                            <div class="item-name">Mezze Sampler</div>
+                            <div style="color: #64748b; font-size: 0.85rem;">Hummus, baba ganoush, tabbouleh, dolmas</div>
+                        </div>
+                        <div class="item-price">$10.50</div>
+                    </div>
+                    <div class="menu-item">
+                        <div>
+                            <div class="item-name">Baklava</div>
+                            <div style="color: #64748b; font-size: 0.85rem;">Honey-soaked phyllo with nuts</div>
+                        </div>
+                        <div class="item-price">$4.50</div>
+                    </div>
+                `;
+            } else {
+                // Default Mexican menu
+                menuHTML = `
+                    <div class="menu-item">
+                        <div>
+                            <div class="item-name">Classic Street Taco</div>
+                            <div style="color: #64748b; font-size: 0.85rem;">Grilled meat, onions, cilantro, lime</div>
+                        </div>
+                        <div class="item-price">$3.50</div>
+                    </div>
+                    <div class="menu-item">
+                        <div>
+                            <div class="item-name">Burrito Supreme</div>
+                            <div style="color: #64748b; font-size: 0.85rem;">Rice, beans, meat, cheese, salsa</div>
+                        </div>
+                        <div class="item-price">$8.99</div>
+                    </div>
+                    <div class="menu-item">
+                        <div>
+                            <div class="item-name">Quesadilla</div>
+                            <div style="color: #64748b; font-size: 0.85rem;">Melted cheese, choice of protein</div>
+                        </div>
+                        <div class="item-price">$6.50</div>
+                    </div>
+                    <div class="menu-item">
+                        <div>
+                            <div class="item-name">Elote (Street Corn)</div>
+                            <div style="color: #64748b; font-size: 0.85rem;">Mayo, cheese, chili powder, lime</div>
+                        </div>
+                        <div class="item-price">$4.00</div>
+                    </div>
+                `;
+            }
+            
+            // Update modal content
+            const modalContent = document.querySelector('.modal-content');
+            const modalHeader = modalContent.querySelector('.modal-header');
+            
+            // Clear existing content except header
+            modalContent.innerHTML = '';
+            modalContent.appendChild(modalHeader);
+            
+            // Add safety section
+            const safetySectionDiv = document.createElement('div');
+            safetySectionDiv.innerHTML = safetySectionHTML;
+            modalContent.appendChild(safetySectionDiv.firstElementChild);
+            
+            // Add menu section
+            const menuSectionDiv = document.createElement('div');
+            menuSectionDiv.className = 'menu-section';
+            menuSectionDiv.innerHTML = `
+                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 700; margin-bottom: 1rem;">${t.menu}</h3>
+                ${menuHTML}
+            `;
+            modalContent.appendChild(menuSectionDiv);
+            
+            // Add payment methods
+            const paymentDiv = document.createElement('div');
+            paymentDiv.style.marginTop = '1.5rem';
+            paymentDiv.innerHTML = `
+                <h4 style="font-weight: 700; margin-bottom: 0.75rem;">${t.paymentMethods}</h4>
+                <div class="payment-methods">
+                    ${truck.payments.map(p => `<span class="payment-icon">${p === 'Card' ? '💳' : p === 'Cash' ? '💵' : p === 'Venmo' ? '📱' : '🔷'} ${p}</span>`).join('')}
+                </div>
+            `;
+            modalContent.appendChild(paymentDiv);
+            
+            // Add location and hours
+            const detailsDiv = document.createElement('div');
+            detailsDiv.style.marginTop = '1.5rem';
+            detailsDiv.innerHTML = `
+                <div style="color: #64748b; margin-bottom: 0.5rem;">
+                    <strong>${t.location}:</strong> ${truck.location}
+                </div>
+                <div style="color: #64748b;">
+                    <strong>${t.hours}:</strong> Mon-Sat 11:00 AM - 9:00 PM
+                </div>
+            `;
+            modalContent.appendChild(detailsDiv);
+            
+            // Add order button
+            const orderBtn = document.createElement('button');
+            orderBtn.className = 'btn-full';
+            orderBtn.style.marginTop = '1.5rem';
+            orderBtn.textContent = t.orderNow;
+            orderBtn.onclick = orderNow;
+            modalContent.appendChild(orderBtn);
+            
+            openModal('truckModal');
+        }
+
+        function vendorLogin() {
+            closeModal('vendorModal');
+            switchView('vendor');
+            // Switch the tab visually
+            const tabs = document.querySelectorAll('.view-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            tabs[1].classList.add('active');
+        }
+
+        function orderNow() {
+            alert('Order functionality would connect to payment system here!');
+        }
+
+        function getDirections() {
+            alert('Opening maps with truck location...');
+        }
+
+        function registerEvent(eventName) {
+            alert(`Successfully registered for ${eventName}! You'll receive confirmation details.`);
+        }
+
+        function uploadCert() {
+            alert('Certificate uploaded successfully! It will be reviewed within 24 hours.');
+            closeModal('certModal');
+        }
+
+        function showEventDetails(eventName) {
+            alert(`Viewing details for: ${eventName}\n\nVendors can register through the Vendor Dashboard.`);
+        }
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
